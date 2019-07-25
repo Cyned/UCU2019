@@ -1,0 +1,12 @@
+# python=3.7
+
+# data manipulations
+pandas==0.24.2
+numpy==1.16.2
+fastparquet==0.3.1
+python-snappy==0.5.4
+
+scikit-learn==0.20.3
+nltk==3.4
+
+tqdm==4.31.1
