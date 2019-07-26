@@ -5,8 +5,14 @@ pandas==0.24.2
 numpy==1.16.2
 fastparquet==0.3.1
 python-snappy==0.5.4
+joblib==0.13.2
 
+# predictive and preprocess models
 scikit-learn==0.20.3
+lightgbm==2.2.3
 nltk==3.4
+langdetect==1.0.7
+hyperopt==0.1.2
+gensim==3.8.0
 
 tqdm==4.31.1
