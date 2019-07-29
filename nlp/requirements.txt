@@ -14,5 +14,6 @@ nltk==3.4
 langdetect==1.0.7
 hyperopt==0.1.2
 gensim==3.8.0
+keras==2.2.4
 
 tqdm==4.31.1

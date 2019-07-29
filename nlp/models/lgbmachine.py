@@ -10,6 +10,8 @@ from hyperopt.pyll import scope
 from sklearn.model_selection import ShuffleSplit
 from sklearn.base import BaseEstimator
 
+from models.utils import params_to_numpy
+
 
 # static model hyper parameters
 PARAMS = {
@@ -71,7 +73,8 @@ class LGBMachine(BaseEstimator):
         # variable for the categorical features
         self._cat_features = None
 
-    def fit(self, x_train, y_train, categorical_features_inds: Iterable = np.ndarray):
+    @params_to_numpy(1, 2)
+    def fit(self, x_train, y_train, categorical_features_inds: Iterable = ()):
         """
         Fit the model
         :param x_train: x sample for training
@@ -86,26 +89,23 @@ class LGBMachine(BaseEstimator):
         else:
             self._features = list(range(len(x_train[0])))
 
-        if not isinstance(x_train, pd.DataFrame):
-            x_train = x_train.toarray()
-
         train_inds, val_inds = next(ShuffleSplit(
             n_splits=1, test_size=0.2, random_state=622333,
         ).split(x_train, groups=list(range(x_train.shape[0]))))
 
-        self.model.fit(X=x_train.iloc[train_inds], y=y_train.iloc[train_inds],
+        self.model.fit(X=x_train[train_inds], y=y_train[train_inds],
                        categorical_feature=self.cat_features,
-                       eval_set=[(x_train.iloc[val_inds], y_train.iloc[val_inds])],
+                       eval_set=[(x_train[val_inds], y_train[val_inds])],
                        verbose=False,
                        )
 
     def predict(self, x_test):
         """ Returns the decision """
-        return self.model.predict(x_test[self.features], categorical_feature=self.cat_features)
+        return self.model.predict(x_test, categorical_feature=self.cat_features)
 
     def predict_proba(self, x_test):
         """ Returns the probability """
-        return self.model.predict_proba(x_test[self.features], categorical_feature=self.cat_features)[:, 1]
+        return self.model.predict_proba(x_test, categorical_feature=self.cat_features)[:, 1]
 
     @property
     def model(self):

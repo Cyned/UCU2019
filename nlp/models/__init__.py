@@ -2,6 +2,7 @@ from models.lgbmachine import LGBMachine, SPACE as lgb_space, PARAMS as lgb_para
 from models.linear_regression import LinearModel, SPACE as lin_space, PARAMS as lin_params
 from models.train_test import train_test
 from models.blending import BlendingFeatures
+from models.doc2vec import Doc2Vec
 
 from typing import Iterable
 
@@ -44,4 +45,5 @@ __all__ = [
     'get_lgb',
     'get_linear',
     'BlendingFeatures',
+    'Doc2Vec',
 ]

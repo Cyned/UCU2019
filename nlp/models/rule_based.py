@@ -22,6 +22,7 @@ NEGATIVE, POSITIVE = get_dictionaries()
 
 
 class RuleBased(BaseEstimator):
+
     def __init__(self, eval_metric = accuracy_score):
         self.positive = POSITIVE
         self.negative = NEGATIVE

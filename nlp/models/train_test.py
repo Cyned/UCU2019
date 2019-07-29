@@ -85,7 +85,10 @@ def train_test(x_train, y_train, estimator, constant_params, space, cat_features
     """
 
     # indices of categorical features
-    cat_features_inds = [list(x_train.columns).index(item) for item in cat_features]
+    if not cat_features:
+        cat_features_inds = [list(x_train.columns).index(item) for item in cat_features]
+    else:
+        cat_features_inds = 'auto'
 
     best_params = optimize_params(
         x_train         = pd.DataFrame(x_train),

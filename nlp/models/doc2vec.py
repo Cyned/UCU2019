@@ -1,10 +1,46 @@
-from sklearn.base import TransformerMixin
+import numpy as np
 
-from gensim.models.keyedvectors import KeyedVectors
+from sklearn.base import TransformerMixin
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+from preprocessing import Tokenizer
 
 
 class Doc2Vec(TransformerMixin):
-    def __init__(self):
-        self.word2vec = KeyedVectors.load_word2vec_format("wiki-news-300d-1M.vec")
+    def __init__(self, word2vec, tokenizer = Tokenizer(stem='lem', remove_spec=True).tokenize):
+        self.word2vec = word2vec
+        self.tokenize = tokenizer
 
+        self.tfidf = TfidfVectorizer(
+            lowercase    = True,
+            tokenizer    = self.tokenize,
+            analyzer     = 'word',
+            ngram_range  = (1, 1),
+            max_df       = 1.0,
+            min_df       = 1,
+            max_features = None,
+        )
+        self.feature_names = []
 
+    def fit(self, x_train, y_train, *args, **kwargs):
+        # self.tfidf.fit(x_train, y_train)
+        # self.feature_names = self.tfidf.get_feature_names()
+        return self
+
+    def doc2vec(self, text: str) -> np.array:
+        """
+
+        :param text:
+        :return:
+        """
+        # tfidf_matrix = self.tfidf.transform([text])
+        # vectors = []
+        # for token in self.tokenize(text):
+        #     if token in self.word2vec and token in self.feature_names:
+        #         tfidf_score = tfidf_matrix[0, self.feature_names.index(token)]
+        #         vectors.append(self.word2vec[token] * tfidf_score)
+        vectors = [self.word2vec[token] for token in self.tokenize(text) if token in self.word2vec]
+        return np.mean(vectors, axis=0)
+
+    def transform(self, x_train):
+        return np.array([self.doc2vec(text=text) for text in x_train])

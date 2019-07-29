@@ -3,7 +3,9 @@ import re
 
 from nltk.corpus import stopwords as stw
 
-from typing import List
+from typing import List, Set
+from models.rule_based import get_dictionaries
+
 
 stopwords        = stw.words('english')
 stemmer          = nltk.PorterStemmer()
@@ -17,7 +19,12 @@ class Tokenizer(object):
     """ Custom Tokenizer """
 
     no_suffix = ('no', 'not')
-    spec_symbols = '`~!@#$%^&*()_-+={[]}|\\:;"<,>.?/' + "'"
+    spec_symbols = [f' {spec} ' for spec in [
+        r'`', r'~', r'!', r'@', r'#', r'\$', r'%', r'\^',
+        r'&', r'\*', r'\(', r'\)', r'_', r'-', r'+', r'=',
+        r'\{', r'\[', r'\]', r'\}', r'\|', r'\\',
+        r':', r';', r'"', r'<', r',', r'>', r'\.', r'\?', r'/', r"'",
+    ]]
 
     def __init__(self, stem: str = None, splitter = None, remove_spec: bool = False):
         """
@@ -54,8 +61,8 @@ class Tokenizer(object):
 
     def remove_spec(self, text: str) -> str:
         """ Remove special symbols """
-        for sym in set(self.spec_symbols):
-            text = text.replace(sym, '')
+        for sym in self.spec_symbols:
+            text = re.sub(sym, ' ', text)
         return text
 
     def remove_stopwords(self, tokens: List[str]) -> List[str]:
@@ -90,8 +97,26 @@ class Tokenizer(object):
         return tokens
 
 
+class DictTokenizer(object):
+    def __init__(self, splitter = None):
+        positive, negative = get_dictionaries()
+        self.dict = {word for word in positive + negative + ['no', 'not'] if len(word.split()) == 1}
+        if not splitter:
+            self.splitter = lambda x: x.split()
+
+    def tokenize(self, text: str) -> Set[str]:
+        text = text.lower()
+        return {lemmatizer.lemmatize(word) for word in self.splitter(text)} & self.dict
+
+
 if __name__ == '__main__':
     text = 'I do not care about this stuff. #Please remove 123 !'
     tokenizer = Tokenizer(stem='stem', splitter=None, remove_spec=True)
     tokens = tokenizer.tokenize(text=text)
     print(tokens)
+    # =================================================================
+    text = 'I do not care about this stuff. #Please remove 123 !'
+    tokenizer = DictTokenizer(splitter=None)
+    tokens = tokenizer.tokenize(text=text)
+    print(tokens)
+
