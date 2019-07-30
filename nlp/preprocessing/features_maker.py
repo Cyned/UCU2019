@@ -30,7 +30,7 @@ class FeaturesMaker(TransformerMixin):
                 self.count_numbers(text=sample),
                 self.count_questions(text=sample),
                 self.count_sentences(text=sample),
-                self.count_unique_words(text=text)
+                self.count_unique_words(text=sample)
             ]
             for sample in x_train
         ], columns=['no', 'commas', 'exclamatory', 'numbers', 'questions', 'sentences', 'unique_words'],

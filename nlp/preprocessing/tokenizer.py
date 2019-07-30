@@ -4,7 +4,7 @@ import re
 from nltk.corpus import stopwords as stw
 
 from typing import List, Set
-from models.rule_based import get_dictionaries
+from preprocessing.utils import get_dictionaries
 
 
 stopwords        = stw.words('english')
