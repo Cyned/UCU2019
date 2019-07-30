@@ -10,6 +10,9 @@ from preprocessing import POSITIVE, NEGATIVE
 
 
 class RuleBased(BaseEstimator):
+    """
+    Models that is oriented of the direct entry of positive and negative words in the text
+    """
 
     def __init__(self, eval_metric = accuracy_score):
         self.positive = POSITIVE

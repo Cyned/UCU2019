@@ -8,6 +8,10 @@ from preprocessing import Tokenizer
 
 class Doc2Vec(TransformerMixin):
     def __init__(self, word2vec, tokenizer = Tokenizer(stem='lem', remove_spec=True).tokenize):
+        """
+        :param word2vec: word2vec model
+        :param tokenizer: tokenizer to preprocess text
+        """
         self.word2vec = word2vec
         self.tokenize = tokenizer
 
@@ -29,9 +33,9 @@ class Doc2Vec(TransformerMixin):
 
     def doc2vec(self, text: str) -> np.array:
         """
-
-        :param text:
-        :return:
+        Get vector of the text
+        :param text: text to get vector from
+        :return: vector of the text
         """
         # tfidf_matrix = self.tfidf.transform([text])
         # vectors = []
@@ -40,6 +44,8 @@ class Doc2Vec(TransformerMixin):
         #         tfidf_score = tfidf_matrix[0, self.feature_names.index(token)]
         #         vectors.append(self.word2vec[token] * tfidf_score)
         vectors = [self.word2vec[token] for token in self.tokenize(text) if token in self.word2vec]
+        if not vectors:
+            return np.zeros(300)
         return np.mean(vectors, axis=0)
 
     def transform(self, x_train):

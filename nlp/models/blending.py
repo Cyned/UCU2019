@@ -13,10 +13,9 @@ class BlendingFeatures(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y):
         """
-
-        :param X:
-        :param y:
-        :return:
+        Fit the model
+        :param X: x train values
+        :param y: target values
         """
         for model in self.models:
             model.fit(X, y)
