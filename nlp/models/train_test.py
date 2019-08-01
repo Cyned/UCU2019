@@ -100,5 +100,7 @@ def train_test(x_train, y_train, estimator, constant_params, space, cat_features
         folds           = 5,
         evals           = evals,
     )
-
-    return estimator(**best_params)
+    best_estimator = estimator(**best_params)
+    best_estimator.fit(x_train, y_train, cat_features)
+    return best_estimator
+    # return estimator(**best_params)
