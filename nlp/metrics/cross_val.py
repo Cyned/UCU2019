@@ -10,11 +10,12 @@ from config import DATA_DIR
 
 def custom_metric() -> Callable:
     """ Returns metric function """
-    def closure(classifier: BaseEstimator, verbose: int = 0) -> float:
+    def closure(classifier: BaseEstimator, verbose: int = 0, n_jobs: int = 1) -> float:
         """
         Count accuracy by cross validation (split=5) on movie_reviews corpora.
         :param classifier: model that has `fit`, `predict` methods. An input for the model must be the plain text.
         :param verbose: level of logging.
+	:param n_jobs: number of workers
         :return: accuracy of the model
         """
         result = cross_val_score(
@@ -23,7 +24,7 @@ def custom_metric() -> Callable:
             y         = data['target'].values,
             scoring   = 'accuracy',
             cv        = kfold,
-            n_jobs    = 1,
+            n_jobs    = n_jobs,
             verbose   = verbose,
         ).mean()
         return result
