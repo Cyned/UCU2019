@@ -10,7 +10,7 @@ joblib==0.13.2
 # predictive and preprocess models
 scikit-learn==0.20.3
 lightgbm==2.2.3
-nltk==3.4
+nltk==3.4.5
 langdetect==1.0.7
 hyperopt==0.1.2
 gensim==3.8.0
