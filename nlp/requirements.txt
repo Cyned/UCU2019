@@ -2,7 +2,7 @@
 
 # data manipulations
 pandas==0.24.2
-numpy==1.16.2
+numpy==1.22.0
 fastparquet==0.3.1
 python-snappy==0.5.4
 joblib==0.13.2
